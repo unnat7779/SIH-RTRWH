@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { prisma } from "../../../../lib/prisma"
+import { prisma } from "../../../lib/prisma"
 
 // POST /api/seed - Seed database with reference data
 export async function POST(request) {

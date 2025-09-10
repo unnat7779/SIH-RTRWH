@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
-import { prisma } from "../../../../lib/prisma"
-import { calculateCostEstimate, calculatePaybackPeriod, getCostBreakdown } from "../../../../lib/cost"
+import { prisma } from "../../../lib/prisma"
+import { calculateCostEstimate, calculatePaybackPeriod, getCostBreakdown } from "../../../lib/cost"
 
 // GET /api/costs - Get cost estimates
 export async function GET(request) {

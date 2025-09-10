@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server"
-import { prisma } from "../../../../lib/prisma"
-import { calculateFeasibilityScore } from "../../../../lib/scoring"
-import { calculateAnnualRunoff } from "../../../../lib/runoff"
-import { calculateCostEstimate } from "../../../../lib/cost"
-import { getDistrictInfo, getGeologicalInfo } from "../../../../lib/geo"
+import { prisma } from "../../../lib/prisma"
+import { calculateFeasibilityScore } from "../../../lib/scoring"
+import { calculateAnnualRunoff } from "../../../lib/runoff"
+import { calculateCostEstimate } from "../../../lib/cost"
+import { getDistrictInfo, getGeologicalInfo } from "../../../lib/geo"
 
 // GET /api/assessments - List user's assessments
 export async function GET(request) {

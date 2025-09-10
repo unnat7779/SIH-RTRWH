@@ -2,10 +2,10 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { Button } from "../../../../components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../../../components/ui/card"
-import { RadioGroup, RadioGroupItem } from "../../../../components/ui/radio-group"
-import { Label } from "../../../../components/ui/label"
+import { Button } from "../../../components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../../components/ui/card"
+import { RadioGroup, RadioGroupItem } from "../../../components/ui/radio-group"
+import { Label } from "../../../components/ui/label"
 import { ArrowLeft, ArrowRight, Shield, AlertTriangle, CheckCircle } from "lucide-react"
 import { toast } from "sonner"
 

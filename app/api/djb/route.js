@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server"
-import { prisma } from "../../../../lib/prisma"
+import { prisma } from "../../../lib/prisma"
 import {
   calculateBillComparison,
   calculateAnnualSavings,
   calculateBillScenarios,
   getTariffSlabInfo,
   validateDJBInputs,
-} from "../../../../lib/djb"
-import { calculateMonthlyRunoff } from "../../../../lib/runoff"
+} from "../../../lib/djb"
+import { calculateMonthlyRunoff } from "../../../lib/runoff"
 
 // GET /api/djb - Calculate DJB bill comparison
 export async function GET(request) {
