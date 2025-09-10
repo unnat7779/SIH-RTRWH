@@ -35,19 +35,22 @@ export function TabsTrigger({ value, className, children, ...props }) {
         className,
       )}
       onClick={() => {
-        const tabsElement = document.querySelector(`[data-active-tab]`)
-        if (tabsElement) {
-          tabsElement.setAttribute("data-active-tab", value)
-          // Hide all tab contents
-          const allContents = document.querySelectorAll("[data-tab-content]")
-          allContents.forEach((content) => (content.style.display = "none"))
-          // Show active tab content
-          const activeContent = document.querySelector(`[data-tab-content="${value}"]`)
-          if (activeContent) activeContent.style.display = "block"
-          // Update trigger states
-          const allTriggers = document.querySelectorAll("[data-tab-trigger]")
-          allTriggers.forEach((trigger) => trigger.removeAttribute("data-state"))
-          document.querySelector(`[data-tab-trigger="${value}"]`).setAttribute("data-state", "active")
+        if (typeof window !== "undefined") {
+          const tabsElement = document.querySelector(`[data-active-tab]`)
+          if (tabsElement) {
+            tabsElement.setAttribute("data-active-tab", value)
+            // Hide all tab contents
+            const allContents = document.querySelectorAll("[data-tab-content]")
+            allContents.forEach((content) => (content.style.display = "none"))
+            // Show active tab content
+            const activeContent = document.querySelector(`[data-tab-content="${value}"]`)
+            if (activeContent) activeContent.style.display = "block"
+            // Update trigger states
+            const allTriggers = document.querySelectorAll("[data-tab-trigger]")
+            allTriggers.forEach((trigger) => trigger.removeAttribute("data-state"))
+            const activeTrigger = document.querySelector(`[data-tab-trigger="${value}"]`)
+            if (activeTrigger) activeTrigger.setAttribute("data-state", "active")
+          }
         }
       }}
       data-tab-trigger={value}
