@@ -13,3 +13,222 @@ datasource db {
   url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
+
+model User {
+  id        String   @id @default(cuid())
+  email     String?  @unique
+  name      String?
+  phone     String?
+  points    Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  properties Property[]
+  userBadges UserBadge[]
+
+  @@map("users")
+}
+
+model Property {
+  id             String   @id @default(cuid())
+  userId         String?
+  label          String?
+  addressText    String?
+  pincode        String?
+  tehsil         String?
+  lat            Float?
+  lon            Float?
+  rooftopAreaSqm Float?
+  roofType       String?
+  runoffCoeff    Float?
+  hasBasement    Boolean  @default(false)
+  landUse        String?
+  photos         String[] @default([])
+  createdAt      DateTime @default(now())
+
+  user          User?           @relation(fields: [userId], references: [id])
+  safetySurveys SafetySurvey[]
+  assessments   Assessment[]
+  houseProfiles HouseProfile[]
+
+  @@map("properties")
+}
+
+model SafetySurvey {
+  id                String   @id @default(cuid())
+  propertyId        String
+  inspectedAt       DateTime @default(now())
+  septicWithin15m   Boolean
+  sewerWithin15m    Boolean
+  openDrainWithin15m Boolean
+  dumpWithin15m     Boolean
+  minDistanceM      Float?
+  confirmation      Boolean  @default(false)
+  result            String?
+
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@map("safety_surveys")
+}
+
+model Assessment {
+  id                   String   @id @default(cuid())
+  propertyId           String
+  createdAt            DateTime @default(now())
+  vetoResult           String?
+  depthBand            String?
+  waterDepthPostM      Float?
+  soilClass            String?
+  lithoClass           String?
+  slopePct             Float?
+  rainfallMm           Float?
+  runoffCoeff          Float?
+  annualRunoffLiters   Float?
+  recommendation       String?
+  recommendationDims   String?
+  scorePoints          Float?
+  score100             Float?
+  scoreLevel           String?
+
+  property         Property           @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  factorScores     FactorScore[]
+  costEstimates    CostEstimate[]
+  billingScenarios BillingScenario[]
+
+  @@map("assessments")
+}
+
+model FactorScore {
+  id           String @id @default(cuid())
+  assessmentId String
+  key          String
+  rawValue     String?
+  band         String?
+  points       Float?
+  weight       Float?
+  weighted     Float?
+
+  assessment Assessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+
+  @@map("factor_scores")
+}
+
+model CostEstimate {
+  id               String @id @default(cuid())
+  assessmentId     String
+  materialSubtotal Float?
+  laborSubtotal    Float?
+  overhead         Float?
+  contingency      Float?
+  preGst           Float?
+  gst              Float?
+  grandTotal       Float?
+  currency         String @default("INR")
+  rateCardVersion  String?
+
+  assessment Assessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  costItems  CostItem[]
+
+  @@map("cost_estimates")
+}
+
+model CostItem {
+  id             String @id @default(cuid())
+  assessmentId   String
+  lineNo         Int?
+  category       String?
+  code           String?
+  description    String?
+  unit           String?
+  qty            Float?
+  unitRate       Float?
+  amount         Float?
+  notes          String?
+
+  costEstimate CostEstimate @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+
+  @@map("cost_items")
+}
+
+model HouseProfile {
+  id              String @id @default(cuid())
+  propertyId      String
+  occupants       Int?
+  monthlyNeedKl   Float?
+  tankerRateInrPerL Float?
+  djbMeter        Boolean @default(false)
+
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@map("house_profiles")
+}
+
+model BillingScenario {
+  id              String @id @default(cuid())
+  assessmentId    String
+  month           String?
+  needKl          Float?
+  rtrwhSupplyKl   Float?
+  djbDrawKl       Float?
+  djbBillWithout  Float?
+  djbBillWith     Float?
+  savings         Float?
+  sewerPct        Float?
+  serviceCharge   Float?
+
+  assessment Assessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+
+  @@map("billing_scenarios")
+}
+
+model Badge {
+  id          String @id @default(cuid())
+  code        String @unique
+  title       String
+  description String?
+  points      Int    @default(0)
+
+  userBadges UserBadge[]
+
+  @@map("badges")
+}
+
+model UserBadge {
+  id        String   @id @default(cuid())
+  userId    String
+  badgeId   String
+  awardedAt DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  badge Badge @relation(fields: [badgeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, badgeId])
+  @@map("user_badges")
+}
+
+model RefTariff {
+  id                String   @id @default(cuid())
+  category          String
+  slabMinKl         Float?
+  slabMaxKl         Float?
+  volumetricInrPerKl Float?
+  sewerPct          Float?
+  serviceCharge     Float?
+  freeUptoKl        Float?
+  effectiveFrom     DateTime @default(now())
+
+  @@map("ref_tariffs")
+}
+
+model RefRates {
+  id            String   @id @default(cuid())
+  kind          String
+  itemCode      String
+  itemName      String
+  unit          String
+  unitRate      Float
+  region        String   @default("Delhi")
+  effectiveFrom DateTime @default(now())
+
+  @@map("ref_rates")
+}
