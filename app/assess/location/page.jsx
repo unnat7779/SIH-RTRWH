@@ -129,9 +129,20 @@ export default function LocationPage() {
   }
 
   useEffect(() => {
+    const loadLeafletCSS = () => {
+      if (typeof window !== "undefined" && !document.querySelector('link[href*="leaflet.css"]')) {
+        const link = document.createElement("link")
+        link.rel = "stylesheet"
+        link.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        document.head.appendChild(link)
+      }
+    }
+
     const loadMap = async () => {
       if (typeof window !== "undefined") {
         try {
+          loadLeafletCSS()
+
           const L = (await import("leaflet")).default
 
           const map = L.map("map").setView([location.lat, location.lon], 13)
@@ -277,14 +288,12 @@ export default function LocationPage() {
   const extractPincodeFromAddress = (addressString) => {
     if (!addressString) return null
 
-    // Look for 6-digit pincode pattern in the address string
     const pincodeMatch = addressString.match(/\b(1[01]\d{4})\b/)
 
     if (pincodeMatch) {
       const pincode = pincodeMatch[1]
       console.log(`[v0] Extracted pincode ${pincode} from address: ${addressString}`)
 
-      // Validate that this pincode exists in Delhi
       const allDelhiPincodes = Object.values(delhiData.pincodeRanges).flat()
       if (allDelhiPincodes.includes(pincode)) {
         console.log(`[v0] Pincode ${pincode} validated as Delhi pincode`)
@@ -675,4 +684,3 @@ export default function LocationPage() {
     </div>
   )
 }
-

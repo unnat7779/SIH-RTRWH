@@ -26,9 +26,7 @@ export const themeColor = "#2563eb"
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <head>
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-      </head>
+      <head></head>
       <body
         className={`${inter.variable} ${jetbrainsMono.variable} antialiased font-sans bg-background text-foreground`}
       >
