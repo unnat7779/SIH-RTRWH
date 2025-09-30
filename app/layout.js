@@ -1,5 +1,6 @@
 import { Inter, JetBrains_Mono } from "next/font/google"
 import "./globals.css"
+import { ThemeProvider } from "../components/theme-provider"
 
 const inter = Inter({
   variable: "--font-geist-sans",
@@ -27,10 +28,8 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head></head>
-      <body
-        className={`${inter.variable} ${jetbrainsMono.variable} antialiased font-sans bg-background text-foreground`}
-      >
-        {children}
+      <body className={`${inter.variable} ${jetbrainsMono.variable} antialiased font-sans bg-background text-foreground`}>
+        <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
   )

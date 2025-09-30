@@ -4,6 +4,7 @@ import { Button } from "../../components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../components/ui/card"
 import { Badge } from "../../components/ui/badge"
 import Link from "next/link"
+import { ThemeToggle } from "../../components/ui/theme-toggle"
 import {
   Droplets,
   Calculator,
@@ -95,9 +96,12 @@ export default function MarketingPage() {
               Dashboard
             </Link>
           </nav>
-          <Link href="/assess/start">
-            <Button className="bg-primary hover:bg-primary/90">Start Assessment</Button>
-          </Link>
+          <div className="flex items-center gap-3">
+            <ThemeToggle />
+            <Link href="/assess/start">
+              <Button className="bg-primary hover:bg-primary/90">Start Assessment</Button>
+            </Link>
+          </div>
         </div>
       </header>
 
